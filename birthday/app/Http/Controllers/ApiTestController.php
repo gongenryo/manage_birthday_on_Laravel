@@ -30,33 +30,43 @@ class ApiTestController extends Controller
 
     public function store(Request $request)
     {
-        $start= strtotime('-1 hour', strtotime($request['birthday']));
-        $start_time= date('c', $start);
+        $start= strtotime('-1 hour', strtotime($request['birthday'])); //大切
+        // $start_time= date('c', $start);
         $end=strtotime($request['birthday']);
-        $end_time= date('c', $end);
+        // $end_time= date('c', $end);
+
         
         $client = $this->getClient();
         $service = new Google_Service_Calendar($client);
-
+        
         $calendarId = env('GOOGLE_CALENDAR_ID');
+        
+        for( $i = 0; $i <= 3; $i++){
 
-        $event = new Google_Service_Calendar_Event(array(
+          $x=strval($i);
+          $a= strtotime("+$x year", $start);
+          $start_time = date('c', $a);
+          $b= strtotime("+$x year", $end);
+          $end_time = date('c', $b);
+
+          $event = new Google_Service_Calendar_Event(array(
             //タイトル
             'summary' => $request->input('name'),
             'start' => array(
-                // 開始日時
-                'dateTime' => $start_time,
-                'timeZone' => 'Asia/Tokyo',
+              // 開始日時
+              'dateTime' => $start_time,
+              'timeZone' => 'Asia/Tokyo',
             ),
             'end' => array(
-                // 終了日時
-                'dateTime' => $end_time,
-                'timeZone' => 'Asia/Tokyo',
+              // 終了日時
+              'dateTime' => $end_time,
+              'timeZone' => 'Asia/Tokyo',
             ),
-        ));
-
-        $event = $service->events->insert($calendarId, $event);
-
+          ));
+          
+          $event = $service->events->insert($calendarId, $event);
+        }
+          
         $birth = new Birthday;
 
         $birth->name     = $request->input('name');
@@ -66,6 +76,7 @@ class ApiTestController extends Controller
         
         return redirect('birthday/index');
     }
+        
 
     public function show($id)
     {
