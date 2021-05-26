@@ -64,6 +64,13 @@ class ApiTestController extends Controller
         return redirect('birthday/index');
     }
 
+    public function show($id)
+    {
+        $friend = Birthday::find($id);
+        
+        return view('birthday.show', compact('friend'));
+    }
+
     public function edit($id)
     {
         $friend = Birthday::find($id);
@@ -73,6 +80,21 @@ class ApiTestController extends Controller
 
     public function update(Request $request, $id)
     {
+        $birthday = Birthday::find($id);
+
+        $birthday->name = $request->input('name');
+        $birthday->birthday = $request->input('birthday');
+
+        $birthday->save();
+
+        return redirect('birthday/index');
+    }
+
+    public function destroy($id)
+    {
+        $birthday = Birthday::find($id);
+        $birthday->delete();
+
         return redirect('birthday/index');
     }
 
