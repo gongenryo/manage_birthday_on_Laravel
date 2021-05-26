@@ -9,7 +9,7 @@
     <input type="text" name="name">
     <br>
     誕生日
-    <input type="datetime-local" name="birthday">
+    <input type="date" name="birthday">
     <br>
     <input class="btn btn-primary" type="submit" value="登録する">
 </body>

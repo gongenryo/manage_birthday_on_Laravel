@@ -30,8 +30,11 @@ class ApiTestController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
-
+        $start= strtotime('-1 hour', strtotime($request['birthday']));
+        $start_time= date('c', $start);
+        $end=strtotime($request['birthday']);
+        $end_time= date('c', $end);
+        
         $client = $this->getClient();
         $service = new Google_Service_Calendar($client);
 
@@ -42,12 +45,12 @@ class ApiTestController extends Controller
             'summary' => $request->input('name'),
             'start' => array(
                 // 開始日時
-                'dateTime' => $request['birthday'].':00+09:00',
+                'dateTime' => $start_time,
                 'timeZone' => 'Asia/Tokyo',
             ),
             'end' => array(
                 // 終了日時
-                'dateTime' => '2021-05-23T12:00:00+09:00',
+                'dateTime' => $end_time,
                 'timeZone' => 'Asia/Tokyo',
             ),
         ));
