@@ -15,7 +15,7 @@ class ApiTestController extends Controller
     public function index()
     {
         $query = DB::table('birthdays');
-        $query->select('name', 'birthday');
+        $query->select('id', 'name', 'birthday');
         $query->orderBy('birthday', 'asc');
 
         $friends = $query->paginate(20);
@@ -66,9 +66,14 @@ class ApiTestController extends Controller
 
     public function edit($id)
     {
-        $birth = Birthday::find($id);
+        $friend = Birthday::find($id);
 
-        return view('birthday.edit', compact('birth'));
+        return view('birthday.edit', compact('friend'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        return redirect('birthday/index');
     }
 
     private function getClient()
