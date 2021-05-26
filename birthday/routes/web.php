@@ -20,4 +20,8 @@ Route::group(['prefix' => 'birthday'], function(){
     Route::get('index', 'ApiTestController@index')->name('birthday.index');
     Route::get('create', 'ApiTestController@create')->name('birthday.create');
     Route::post('store', 'ApiTestController@store')->name('birthday.store');
+    Route::get('edit/{id}', 'ApiTestController@edit')->name('birthday.edit');
+    Route::post('update/{id}', 'ApiTestController@update')->name('birthday.update');
+    Route::post('destroy/{id}', 'ApiTestController@destroy')->name('birthday.destroy');
+
 });
