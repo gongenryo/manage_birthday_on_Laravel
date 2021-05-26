@@ -64,6 +64,13 @@ class ApiTestController extends Controller
         return redirect('birthday/index');
     }
 
+    public function edit($id)
+    {
+        $birth = Birthday::find($id);
+
+        return view('birthday.edit', compact('birth'));
+    }
+
     private function getClient()
     {
         $client = new Google_Client();
