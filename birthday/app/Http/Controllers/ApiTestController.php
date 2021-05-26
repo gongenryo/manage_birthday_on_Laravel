@@ -3,12 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Birthday;
+use Illuminate\Support\Facades\DB;
+
 use Google_Client;
 use Google_Service_Calendar;
 use Google_Service_Calendar_Event;
 
 class ApiTestController extends Controller
 {
+    public function index()
+    {
+        $query = DB::table('birthdays');
+        $query->select('name', 'birthday');
+        $query->orderBy('birthday', 'asc');
+
+        $friends = $query->paginate(20);
+
+        return view('birthday.index', compact('friends'));
+    }
+
     public function create()
     {
         return view('birthday.create');
@@ -39,8 +53,15 @@ class ApiTestController extends Controller
         ));
 
         $event = $service->events->insert($calendarId, $event);
+
+        $birth = new Birthday;
+
+        $birth->name     = $request->input('name');
+        $birth->birthday = $request->input('birthday');
+
+        $birth->save();
         
-        return redirect('birthday.index');
+        return redirect('birthday/index');
     }
 
     private function getClient()
