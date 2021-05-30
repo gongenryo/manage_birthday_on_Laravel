@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Birthday;
+use App\Models\Birthday;
 use Illuminate\Support\Facades\DB;
 
 use Google_Client;
@@ -41,7 +41,7 @@ class ApiTestController extends Controller
         
         $calendarId = env('GOOGLE_CALENDAR_ID');
         
-        for( $i = 0; $i <= 3; $i++){
+        for( $i = 0; $i <= 1; $i++){
 
           $x=strval($i);
           $a= strtotime("+$x year", $start);
@@ -65,14 +65,18 @@ class ApiTestController extends Controller
           ));
           
           $event = $service->events->insert($calendarId, $event);
-        }
+          $event_id = $event->getId();
           
-        $birth = new Birthday;
+          $birth = new Birthday;
+          
+          $birth->name     = $request->input('name');
+          $birth->birthday = $request->input('birthday');
+          $birth->event_id = $event_id;
 
-        $birth->name     = $request->input('name');
-        $birth->birthday = $request->input('birthday');
-
-        $birth->save();
+          $birth->save();
+          
+          
+        }
         
         return redirect('birthday/index');
     }
