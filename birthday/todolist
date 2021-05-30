@@ -1,0 +1,4 @@
+create の type date の初期値を2000年くらいにする
+destroy でカレンダーからも消す
+見た目整える
+validation 
