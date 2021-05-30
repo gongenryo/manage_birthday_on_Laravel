@@ -14,13 +14,19 @@ class ApiTestController extends Controller
 {
     public function index()
     {
-        $query = DB::table('birthdays');
-        $query->select('id', 'name', 'birthday');
-        $query->orderBy('birthday', 'asc');
+        $query = DB::table('birthdays')->pluck('birthday', 'name');
+        $keys = $query->keys();
+        $data = DB::table('birthdays')
+                ->where('name', $keys[0])
+                ->select('id', 'name','birthday')
+                ->first();
+                
+        // $query->select('id', 'name', 'birthday');
+        // $query->orderBy('birthday', 'asc');
 
-        $friends = $query->paginate(20);
+        // $friends = $query->paginate(20);
 
-        return view('birthday.index', compact('friends'));
+        return view('birthday.index', compact('keys', 'data'));
     }
 
     public function create()
