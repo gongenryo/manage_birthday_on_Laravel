@@ -15,18 +15,28 @@ class ApiTestController extends Controller
     public function index()
     {
         $query = DB::table('birthdays')->pluck('birthday', 'name');
-        $keys = $query->keys();
-        $data = DB::table('birthdays')
-                ->where('name', $keys[0])
+        $keys = $query->keys(); //=[0 => "永野芽郁",1 => "小栗旬",2 => "佐藤健]
+        $kazu = $keys->count(); //=3
+        $index_lists = [];
+
+        for($i=0; $i<=2; $i++){
+            $data = DB::table('birthdays')
+                ->where('name', $keys[$i])
                 ->select('id', 'name','birthday')
                 ->first();
+
+            $index_lists[] = $data;
+        }
+
+        
+        
                 
         // $query->select('id', 'name', 'birthday');
         // $query->orderBy('birthday', 'asc');
 
         // $friends = $query->paginate(20);
 
-        return view('birthday.index', compact('keys', 'data'));
+        return view('birthday.index', compact('keys', 'query', 'index_lists', 'kazu'));
     }
 
     public function create()
