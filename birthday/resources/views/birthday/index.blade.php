@@ -5,11 +5,3 @@
   <br>
 @endforeach
 <a href="{{ route('birthday.create') }}">新規作成</a>
-
-
-<?php
-$alkfj = count($a); 
-dd($alkfj);
-echo $a[0]['id'];
-
-?>
