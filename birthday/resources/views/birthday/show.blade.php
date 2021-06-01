@@ -11,10 +11,3 @@
 @csrf
 <input class="btn btn-danger" type="submit" value="削除する">                 
 </form>
-
-<?php
-echo $friend['name']; 
-
-
-
-?>
