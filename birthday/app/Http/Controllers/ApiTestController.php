@@ -19,7 +19,7 @@ class ApiTestController extends Controller
         $query = DB::table('birthdays')->pluck('birthday', 'name');
         $keys = $query->keys(); //=[0 => "永野芽郁",1 => "小栗旬",2 => "佐藤健]
         $kazu = $keys->count(); //=3
-        $indeto_string_lists = [];
+        $index_lists = [];
 
         for($i=0; $i<$kazu; $i++){
             $data = DB::table('birthdays')
@@ -52,11 +52,11 @@ class ApiTestController extends Controller
         $calendarId = env('GOOGLE_CALENDAR_ID');
 
         //複数年分入れる為for文を使う
-        for( $i = 0; $i <= 1; $i++){
+        for( $i = 0; $i <= 25; $i++){
 
           $to_string = strval($i);
           $start_up = strtotime("+$to_string year", $start);
-          $start_time = date('c', $start_u);
+          $start_time = date('c', $start_up);
           $end_up = strtotime("+$to_string year", $end);
           $end_time = date('c', $end_up);
 
@@ -115,9 +115,9 @@ class ApiTestController extends Controller
         $service = new Google_Service_Calendar($client);
         $calendarId = env('GOOGLE_CALENDAR_ID');
 
-        $get_data = birthday::find($id);
+        $get_data = Birthday::find($id);
         $get_detailed_data = $get_data['name'];
-        $update_recodes = birthday::where('name', $get_detailed_data)->get();
+        $update_recodes = Birthday::where('name', $get_detailed_data)->get();
         $number_of_recodes = count($update_recodes);
 
         //googleカレンダーからの削除（先にやらないとdbから情報取れない？）
