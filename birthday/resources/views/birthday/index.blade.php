@@ -13,11 +13,6 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <form methodd="GET" action="{{ route('birthday.create') }}">
-                    <button type="submit" class="btn btn-primary">
-                    新規登録
-                    </button>
-                    </form>
 
                     <table class="table">
                         <thead>
@@ -36,6 +31,13 @@
                             @endforeach
                         </tbody>
                     </table>
+
+                    <form methodd="GET" action="{{ route('birthday.create') }}">
+                    <button type="submit" class="btn btn-primary">
+                    新規登録
+                    </button>
+                    </form>
+                    
                 </div>
             </div>
         </div>
