@@ -28,6 +28,8 @@ class ApiTestController extends Controller
             $index_lists[] = $data;
         }
 
+        $a = Birthday::where('name', '有村架純')->get();
+
         
         
                 
@@ -36,7 +38,7 @@ class ApiTestController extends Controller
 
         // $friends = $query->paginate(20);
 
-        return view('birthday.index', compact('keys', 'query', 'index_lists', 'kazu'));
+        return view('birthday.index', compact('keys', 'query', 'index_lists', 'kazu', 'a'));
     }
 
     public function create()
@@ -124,10 +126,38 @@ class ApiTestController extends Controller
         return redirect('birthday/index');
     }
 
-    public function destroy($id)
+    public function destroy($id) //完成
     {
-        $birthday = Birthday::find($id);
-        $birthday->delete();
+        $client = $this->getClient();
+        $service = new Google_Service_Calendar($client);
+        
+        $calendarId = env('GOOGLE_CALENDAR_ID');
+
+        $a = Birthday::find($id);
+        $b = $a['name'];
+        $c = Birthday::where('name', $b)->get();
+        $d = count($c);
+        for($i=0; $i<$d; $i++){
+            $delete_event_id = $c[$i]['event_id'];
+            $service->events->delete($calendarId, $delete_event_id);
+        }
+        for($i=0; $i < $d; $i++){
+            $delete_id = $c[$i]['id'];
+            $delete_recode = Birthday::find($delete_id);
+            $delete_recode->delete();
+        }
+        // $birthday = Birthday::find($id);
+        // $same_name = $birthday->name;
+        // $deletes = Birthday::where('name', $same_name)
+        //                     ->select('id')
+        //                     ->get();
+        // $ids = $deletes->keys();
+        // $kazu = $ids->count();
+        // for($i=0; $i<$kazu; $i++){
+        //     $delete = Birthday::find($ids[$i]);
+        //     $delete->delete();
+        // }
+        // // $birthday->delete();
 
         return redirect('birthday/index');
     }
