@@ -12,9 +12,10 @@ use Google_Service_Calendar_Event;
 
 class ApiTestController extends Controller
 {
-    public function index()
+    public function index() //完成
     {
 
+        //同一人物の情報がDB上に複数ある為、1つだけを表示する
         $query = DB::table('birthdays')->pluck('birthday', 'name');
         $keys = $query->keys(); //=[0 => "永野芽郁",1 => "小栗旬",2 => "佐藤健]
         $kazu = $keys->count(); //=3
@@ -29,25 +30,28 @@ class ApiTestController extends Controller
             $index_lists[] = $data;
         }
 
-        return view('birthday.index', compact('keys', 'query', 'index_lists', 'kazu'));
+        return view('birthday.index', compact('index_lists'));
 
     }
 
-    public function create()
+    public function create() //完成
     {
         return view('birthday.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request) //完成
     {
 
+        //誕生日の前日の午後11:00から1時間の予定をいれるために時間を調整
         $start = strtotime('-1 hour', strtotime($request['birthday'])); //大切
         $end   = strtotime($request['birthday']);
         
+        //google calendarを使う準備
         $client = $this->getClient();
         $service = new Google_Service_Calendar($client);
         $calendarId = env('GOOGLE_CALENDAR_ID');
-        
+
+        //複数年分入れる為for文を使う
         for( $i = 0; $i <= 1; $i++){
 
           $to_string = strval($i);
@@ -86,7 +90,7 @@ class ApiTestController extends Controller
     }
         
 
-    public function show($id)
+    public function show($id) //完成
     {
 
         $friend = Birthday::find($id);
@@ -95,7 +99,7 @@ class ApiTestController extends Controller
 
     }
 
-    public function edit($id)
+    public function edit($id) //完成
     {
 
         $friend = Birthday::find($id);
@@ -103,7 +107,7 @@ class ApiTestController extends Controller
         return view('birthday.edit', compact('friend'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) //完成
     {
 
         //google calendarを操作する準備
@@ -160,12 +164,6 @@ class ApiTestController extends Controller
             
           }
 
-        // $birthday = birthday::find($id);
-        // $birthday->name = $request->input('name');
-        // $birthday->birthday = $request->input('birthday');
-
-        // $birthday->save();
-
         return redirect('birthday/index');
 
     }
@@ -201,16 +199,12 @@ class ApiTestController extends Controller
 
     }
 
-    private function getClient()
+    private function getClient() //完成
     {
 
         $client = new Google_Client();
-
-        //アプリケーション名
         $client->setApplicationName('GoogleCalendarAPIのテスト');
-        //権限の指定
         $client->setScopes(Google_Service_Calendar::CALENDAR_EVENTS);
-        //JSONファイルの指定
         $client->setAuthConfig(storage_path('app/api-key/birthday-314802-a0994a6ac05f.json'));
 
         return $client;
