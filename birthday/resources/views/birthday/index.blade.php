@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Birthday</div>
+                <div class="card-header">誕生日一覧</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -37,7 +37,7 @@
                     新規登録
                     </button>
                     </form>
-                    
+
                 </div>
             </div>
         </div>
